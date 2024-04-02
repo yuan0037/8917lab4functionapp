@@ -17,26 +17,29 @@ namespace _8917lab4FunctionAppConfirmed
         }
 
         [Function(nameof(Function1))]
-        public void Run([ServiceBusTrigger("booking-status", "confirmed", Connection = "Endpoint=sb://yuan0037lab4.servicebus.windows.net/;SharedAccessKeyName=listen_policy;SharedAccessKey=YWpTKASsnjVupHKQ75UTPpFcqq+O0d5wt+ASbCC5YdM=;EntityPath=booking-status")] ServiceBusReceivedMessage message)
+        public void Run([ServiceBusTrigger("booking-status", "confirmed", 
+            Connection = "MyConnection"
+            )] ServiceBusReceivedMessage message)
         {
             _logger.LogInformation("Message ID: {id}", message.MessageId);
             _logger.LogInformation("Message Body: {body}", message.Body);
             _logger.LogInformation("Message Content-Type: {contentType}", message.ContentType);
-            try
-            {
-                if (message.ApplicationProperties.ContainsKey("label")) {
+            SendEmail(["confirmed"]);
+            //try
+            //{
+            //    if (message.ApplicationProperties.ContainsKey("label")) {
 
-                    if (message.ApplicationProperties.GetValueOrDefault("label").ToString() == "confirmed")
-                    {
-                        SendEmail(["confirmed"]);
-                    }
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                // Handle the ArgumentNullException here
-                Console.WriteLine("ArgumentNullException occurred: " + ex.Message);
-            }
+            //        if (message.ApplicationProperties.GetValueOrDefault("label").ToString() == "confirmed")
+            //        {
+            //            SendEmail(["confirmed"]);
+            //        }
+            //    }
+            //}
+            //catch (ArgumentNullException ex)
+            //{
+            //    // Handle the ArgumentNullException here
+            //    Console.WriteLine("ArgumentNullException occurred: " + ex.Message);
+            //}
         }
 
         static void SendEmail(string[] args)
