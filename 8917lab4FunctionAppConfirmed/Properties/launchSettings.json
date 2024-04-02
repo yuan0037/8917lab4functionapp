@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "_8917lab4FunctionAppConfirmed": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7102",
+      "launchBrowser": false
+    }
+  }
+}
