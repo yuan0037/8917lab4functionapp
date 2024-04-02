@@ -24,22 +24,37 @@ namespace _8917lab4FunctionAppConfirmed
             _logger.LogInformation("Message ID: {id}", message.MessageId);
             _logger.LogInformation("Message Body: {body}", message.Body);
             _logger.LogInformation("Message Content-Type: {contentType}", message.ContentType);
-            SendEmail(["confirmed"]);
-            //try
-            //{
-            //    if (message.ApplicationProperties.ContainsKey("label")) {
 
-            //        if (message.ApplicationProperties.GetValueOrDefault("label").ToString() == "confirmed")
-            //        {
-            //            SendEmail(["confirmed"]);
-            //        }
-            //    }
-            //}
-            //catch (ArgumentNullException ex)
-            //{
-            //    // Handle the ArgumentNullException here
-            //    Console.WriteLine("ArgumentNullException occurred: " + ex.Message);
-            //}
+            try
+            {
+                if (message.ApplicationProperties.ContainsKey("label"))
+                {
+
+                    if (message.ApplicationProperties.GetValueOrDefault("label").ToString() == "confirmed")
+                    {
+                        SendEmail(["confirmed"]);
+                    }
+                    else
+                    {
+                        if (message.ApplicationProperties.GetValueOrDefault("label").ToString() == "confirmed")
+                        {
+                            SendEmail(["rejected"]);
+                        }
+                        else
+                        {
+                            SendEmail(["unknow status"]);
+                        }
+                    }
+                } else
+                {
+                    SendEmail(["missing status label"]);
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                // handle the argumentnullexception here
+                Console.WriteLine("argumentnullexception occurred: " + ex.Message);
+            }
         }
 
         static void SendEmail(string[] args)
@@ -50,8 +65,8 @@ namespace _8917lab4FunctionAppConfirmed
 
             var sender = "DoNotReply@1f805881-bf05-4e2b-8372-2f600b7990a3.azurecomm.net";
             var recipient = "bobyuan@gmail.com";
-            var subject = "Order Status";
-            var htmlContent = "<html><body><h1>Order Status</h1><br/><h4>Order Status Received</h4><p>Happy Learning!!</p></body></html>";
+            var subject = "Order Status " + args[0];
+            var htmlContent = "<html><body><h1>Order Status " + args[0] + " </h1><br/><h4>Your order is "+ args[0] + "</h4><p>Happy Shopping!!</p></body></html>";
 
             try
             {
